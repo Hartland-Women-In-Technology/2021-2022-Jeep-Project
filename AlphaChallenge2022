@@ -1,0 +1,84 @@
+#include <Servo.h> 
+
+Servo rightMotor;
+Servo leftMotor;
+int time = 0;
+
+int Echo = A4;
+int Trig = A5;
+const int L1 = A1; //line1 sensors pins
+const int L2 = A2; //line2 sensors pins
+
+
+/*
+writeMicroseconds SYNTAX:
+name.writeMicroseconds(pulse Width);
+----------------------------------------
+Pulse Width nums for LEFT MOTOR:
+=1000: FULL forward
+<=1440: forward
+=1475ish: STOP
+>=15000 reverse
+=2000 FULL reverse
+
+Pulse Width nums for RIGHT MOTOR:
+=1000: FULL reverse
+<=1440: reverse
+=1475ish: STOP
+>=15000 forward
+=2000 FULL forward
+----------------------------------------
+*/
+
+void setup() {
+  rightMotor.attach(10);
+  leftMotor.attach(11);
+  pinMode(Echo, INPUT);
+  pinMode(Trig, OUTPUT);
+
+  Serial.begin(9600); 
+  }
+void forward(){
+  leftMotor.writeMicroseconds(1560); //do not change this is perfect speed 
+  rightMotor.writeMicroseconds(1390); //do not change this is perfect speed 
+Serial.println("forward");
+  }
+void right(){
+  rightMotor.writeMicroseconds(1475); //stop
+  leftMotor.writeMicroseconds(1700); //forward
+Serial.println("right");
+  }
+void left(){
+  leftMotor.writeMicroseconds(1475); //stop
+  rightMotor.writeMicroseconds(1300); //forward
+Serial.println("left");
+  }
+void reverse(){
+  leftMotor.writeMicroseconds(1390); //reverse
+  rightMotor.writeMicroseconds(1560); //reverse
+Serial.println("reverse");
+  }
+void stop(){
+  leftMotor.writeMicroseconds(1475); //stop
+  rightMotor.writeMicroseconds(1475); //stop
+Serial.println("stop");
+  }
+ void loop(){
+  while(time<2400){
+    forward();
+    time++;
+  }
+  while(time<4800){
+    right();
+    time++;
+  }
+  while (time<7200){
+    reverse();
+    time++;
+  }
+  while(time<9600){
+     left();
+     time++;
+  }
+  stop();
+  }
