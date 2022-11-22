@@ -1,0 +1,116 @@
+#include <Servo.h> 
+
+Servo rightMotor;
+Servo leftMotor;
+int time = 0;
+
+int Echo = A4;
+int Trig = A5;
+const int L1 = A1; //line1 sensors pins
+const int L2 = A2; //line2 sensors pins
+
+
+/*
+writeMicroseconds SYNTAX:
+name.writeMicroseconds(pulse Width);
+----------------------------------------
+Pulse Width nums for RIGHT MOTOR:
+=1000: FULL forward
+<=1440: forward
+=1475ish: STOP
+>=1500 reverse
+=2000 FULL reverse
+
+Pulse Width nums for LEFT MOTOR:
+=1000: FULL reverse
+<=1440: reverse
+=1475ish: STOP
+>=1500 forward
+=2000 FULL forward
+----------------------------------------
+*/
+
+void setup() {
+  rightMotor.attach(10);
+  leftMotor.attach(11);
+  pinMode(Echo, INPUT);
+  pinMode(Trig, OUTPUT);
+
+  Serial.begin(9600); 
+  }
+void forward(){
+  leftMotor.writeMicroseconds(1700); //do not change this is perfect speed 1560
+  rightMotor.writeMicroseconds(1300); //do not change this is perfect speed 1390
+Serial.println("forward");
+  }
+void right(){
+  leftMotor.writeMicroseconds(1600); //stop
+  rightMotor.writeMicroseconds(1600); //forward
+Serial.println("right");
+  }
+void left(){
+  leftMotor.writeMicroseconds(1600); //stop
+  rightMotor.writeMicroseconds(1600); //forward
+Serial.println("left");
+  }
+void reverse(){
+  leftMotor.writeMicroseconds(1300); //reverse
+  rightMotor.writeMicroseconds(1700); //reverse
+Serial.println("reverse");
+  }
+void stop(){
+  leftMotor.writeMicroseconds(1470); //stop
+  rightMotor.writeMicroseconds(1470); //stop
+Serial.println("stop");
+  }
+/*void loop(){
+  while(time<500){
+    forward();
+    time++;
+  }
+  while(time<1000){
+    right();
+    time++;
+  }
+  while(time<1500){
+    left();
+    time++;
+    }
+  while (time<2000){
+    reverse();
+    time++;
+  }
+  stop();
+  }
+  */
+  void loop(){
+    while( time<300){
+      forward();
+      time++;
+    }
+    while(time<1300){
+      right();
+      time++;
+    }
+    while(time<2300){
+      left();
+      time++;
+    }
+    while(time<2600){
+      forward();
+      time++;
+    }
+    while(time<4000){
+      left();
+      time++;
+    }
+    while(time<4500){
+      right();
+      time++;
+    }
+    while(time<4700){
+      forward();
+      time++;
+    }
+    stop();
+  }
