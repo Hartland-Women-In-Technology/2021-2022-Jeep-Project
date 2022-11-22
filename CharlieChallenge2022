@@ -1,0 +1,138 @@
+#include <Servo.h> 
+#define echoPin 2
+#define trigPin 3
+Servo rightMotor;
+Servo leftMotor;
+
+int Echo = 2;
+int Trig = 3;
+/*
+writeMicroseconds SYNTAX:
+name.writeMicroseconds(pulse Width);
+----------------------------------------
+Pulse Width nums:
+=1000: FULL forward
+<=1440: forward
+=1475ish: STOP
+>=15000 reverse
+=2000 FULL reverse
+----------------------------------------
+*/
+
+void setup() {
+  rightMotor.attach(10);
+  leftMotor.attach(11);
+  pinMode(Echo, INPUT);
+  pinMode(Trig, OUTPUT);
+  Serial.begin(9600);
+  }
+  
+  //general movement functions
+void forward(){
+  rightMotor.writeMicroseconds(1275);
+  leftMotor.writeMicroseconds(1700); 
+Serial.println("forward");
+  }
+  
+void right(){
+  rightMotor.writeMicroseconds(1475); //stop
+  leftMotor.writeMicroseconds(2000);
+Serial.println("right");
+  }
+  
+void left(){
+  leftMotor.writeMicroseconds(1475); //stop
+  rightMotor.writeMicroseconds(2000);
+Serial.println("left");
+  }
+  
+void reverse(){
+  leftMotor.writeMicroseconds(1275);
+  rightMotor.writeMicroseconds(1700);
+Serial.println("reverse");
+  }
+  
+void stop(){
+  leftMotor.writeMicroseconds(1475); //stop
+  rightMotor.writeMicroseconds(1475); //stop
+Serial.println("stop");
+  }
+
+//Ultrasonic distance measurement Sub function
+long duration;
+int distance;
+int getDistance() {
+    // Clears the trigPin
+    digitalWrite(Trig, LOW);
+    delayMicroseconds(2);
+
+    // Sets the trigPin on HIGH state for 10 micro seconds
+    digitalWrite(Trig, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(Trig, LOW);
+   
+    // Reads the echoPin, returns the sound wave travel time in microseconds
+    duration = pulseIn(Echo, HIGH);
+  
+    // Calculating the distance
+   distance= duration*0.034/2;    
+   Serial.println(distance);
+   return (int) distance;
+}
+
+void loop(){
+ double objDistance=getDistance();
+  if(objDistance>91){
+Serial.println("NO object");
+  forward();
+}
+else{
+Serial.println("OBJECT");
+  stop();
+   }
+}
+
+
+
+
+
+  //I beleive this is the original code before it was optimized above ^^ (I hope)
+/*int rightDistance = 0, leftDistance = 0, middleDistance = 0;
+void loop(){
+  rightMotor.write(90);  //set right servo position according to scaled value
+    delay(500);
+    middleDistance = getDistance();
+
+    if(middleDistance <= 20) {
+      stop();
+      delay(500);
+      rightMotor.write(10);
+      delay(1000);
+      rightDistance = getDistance();
+
+      delay(500);
+      rightMotor.write(90);
+      delay(1000);
+      rightMotor.write(180);
+      delay(1000);
+      leftDistance = getDistance();
+
+      delay(500);
+      rightMotor.write(90);
+      delay(1000);
+      if(rightDistance > leftDistance) {
+        right();
+        delay(360);
+        }
+      else if((rightDistance <= 20) || (leftDistance <= 20)) {
+        reverse();
+        delay(180);
+      }
+      else {
+        forward();
+      }
+    }
+    else {
+        forward();
+    }
+  }*/
